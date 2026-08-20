@@ -16,6 +16,7 @@
 # Production dependencies and compiled assets are deployed through Git.
 /public/hot
 /public/storage
+/public/images/service-categories/uploads/
 /storage/*.key
 /storage/pail
 Homestead.json
