@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Infrastruktur TI</title>
+  <desc id="desc">Ilustrasi jaringan, server, dan koneksi internet.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b3558"/>
+      <stop offset="1" stop-color="#137cbd"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eaf8fc"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <circle cx="552" cy="72" r="70" fill="#19aedd" opacity=".28"/>
+  <circle cx="86" cy="302" r="92" fill="#f5c521" opacity=".18"/>
+  <rect x="74" y="76" width="192" height="208" rx="16" fill="url(#panel)" stroke="#cdeaf5" stroke-width="4"/>
+  <rect x="106" y="112" width="128" height="20" rx="10" fill="#137cbd"/>
+  <rect x="106" y="158" width="128" height="20" rx="10" fill="#19aedd"/>
+  <rect x="106" y="204" width="128" height="20" rx="10" fill="#f5c521"/>
+  <rect x="106" y="248" width="82" height="10" rx="5" fill="#b8e2f0"/>
+  <path d="M266 180h88M424 180h74M390 144v-46M390 216v50" fill="none" stroke="#b8e2f0" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="390" cy="180" r="42" fill="#ffffff" stroke="#19aedd" stroke-width="8"/>
+  <circle cx="390" cy="98" r="24" fill="#f5c521"/>
+  <circle cx="498" cy="180" r="28" fill="#ffffff" stroke="#cdeaf5" stroke-width="8"/>
+  <circle cx="390" cy="266" r="24" fill="#ffffff" stroke="#cdeaf5" stroke-width="8"/>
+  <path d="M374 181l12 12 26-30" fill="none" stroke="#137cbd" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
