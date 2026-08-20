@@ -8,6 +8,24 @@
                 <div class="w-1/3 bg-[#19AEDD]"></div>
                 <div class="w-1/3 bg-[#F5C521]"></div>
             </div>
+            <div class="mb-6">
+                        <a href="{{ route('welcome') }}"
+                           class="inline-flex items-center gap-2 text-sm font-medium text-[#137CBD] transition hover:text-[#0D6EAE]">
+
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="h-4 w-4"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke="currentColor">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M15 19l-7-7 7-7" />
+                            </svg>
+
+                            Kembali ke Beranda
+                        </a>
+                    </div>
             <div class="p-6">
             <div class="mb-6">
                 <div class="mb-4 flex justify-center">
@@ -37,9 +55,9 @@
 
                 <button class="w-full rounded-md bg-[#137CBD] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#0D6EAE]">Masuk</button>
             </form>
-                <a href="{{ route('welcome') }}"
-                    class="mt-4 block w-full rounded-md bg-[#137CBD] px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-[#0D6EAE]">
-                     Beranda
+                <a href="{{ route('register') }}"
+                    class="mt-4 block text-center text-sm font-semibold text-[#137CBD] hover:underline">
+                    Belum punya akun? Daftar
                 </a>
             </div>
         </div>

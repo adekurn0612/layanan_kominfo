@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,12 @@ class AuthenticatedSessionController extends Controller
         $remember = (bool) ($credentials['remember'] ?? false);
 
         unset($credentials['remember']);
+
+        if (($user = User::where('email', $credentials['email'])->first()) && ! $user->is_active) {
+            throw ValidationException::withMessages([
+                'email' => __('Akun Anda belum diverifikasi oleh admin.'),
+            ]);
+        }
 
         if (! Auth::attempt($credentials + ['is_active' => true], $remember)) {
             throw ValidationException::withMessages([

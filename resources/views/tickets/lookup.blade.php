@@ -39,6 +39,7 @@
             @php
                 $statusClasses = [
                     'submitted' => 'bg-[#EAF8FC] text-[#137CBD]',
+                    'in_review' => 'bg-sky-50 text-sky-700',
                     'verified' => 'bg-sky-50 text-sky-700',
                     'in_progress' => 'bg-amber-50 text-amber-700',
                     'completed' => 'bg-[#0B3558] text-white',
@@ -46,7 +47,8 @@
                 ][$ticket->status] ?? 'bg-[#EAF8FC] text-zinc-700';
 
                 $statusLabel = [
-                    'submitted' => 'Submitted',
+                    'submitted' => 'Diajukan',
+                    'in_review' => 'Sedang Diverifikasi',
                     'verified' => 'Terverifikasi',
                     'in_progress' => 'Diproses',
                     'completed' => 'Selesai',
@@ -79,6 +81,25 @@
                     </div>
                 </dl>
             </x-ui.card>
+
+            @if ($canViewFollowUps && $ticket->followUps->isNotEmpty())
+                <x-ui.card class="mt-5">
+                    <h2 class="font-semibold">Informasi dari Petugas</h2>
+                    <div class="mt-4 space-y-4">
+                        @foreach ($ticket->followUps as $followUp)
+                            <article class="border-l-2 border-[#19AEDD] pl-4">
+                                <time class="text-xs text-zinc-500">{{ $followUp->created_at->format('d M Y H:i') }}</time>
+                                @if ($followUp->comment)
+                                    <p class="mt-1 whitespace-pre-line text-sm text-zinc-700">{{ $followUp->comment }}</p>
+                                @endif
+                                @if ($followUp->file_path)
+                                    <a href="{{ route('tickets.follow-ups.file', [$ticket, $followUp->id]) }}" class="mt-2 inline-block text-sm font-medium underline">Lihat lampiran: {{ $followUp->file_name }}</a>
+                                @endif
+                            </article>
+                        @endforeach
+                    </div>
+                </x-ui.card>
+            @endif
         @elseif ($searched)
             <x-ui.card class="mt-5 border-red-200 bg-red-50">
                 <h2 class="text-base font-semibold text-red-800">Tiket tidak ditemukan</h2>

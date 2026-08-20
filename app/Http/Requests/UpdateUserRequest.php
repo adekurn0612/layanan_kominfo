@@ -25,8 +25,8 @@ class UpdateUserRequest extends FormRequest
         return [
             'organization_id' => ['nullable', 'exists:organizations,id'],
             'name' => ['required', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:25', 'regex:/^[0-9+()\-\s]+$/'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user)],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'roles' => ['array'],
             'roles.*' => ['exists:roles,id', Rule::notIn($restrictedRoleIds)],
             'is_active' => ['nullable', 'boolean'],

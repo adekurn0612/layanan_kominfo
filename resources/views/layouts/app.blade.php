@@ -37,6 +37,7 @@
                             <a href="{{ route('admin.organizations.index') }}" class="block rounded-md px-3 py-2 text-[#5B7180] transition hover:bg-[#EAF8FC] hover:text-[#137CBD]">Organisasi</a>
                             <a href="{{ route('admin.service-categories.index') }}" class="block rounded-md px-3 py-2 text-[#5B7180] transition hover:bg-[#EAF8FC] hover:text-[#137CBD]">Kategori Layanan</a>
                             <a href="{{ route('admin.services.index') }}" class="block rounded-md px-3 py-2 text-[#5B7180] transition hover:bg-[#EAF8FC] hover:text-[#137CBD]">Layanan</a>
+                            <a href="{{ route('admin.tickets.index') }}" class="block rounded-md px-3 py-2 text-[#5B7180] transition hover:bg-[#EAF8FC] hover:text-[#137CBD]">Tindak Lanjut Tiket</a>
                         @endcan
                     </nav>
                 </aside>

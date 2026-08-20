@@ -10,9 +10,9 @@
             <thead class="bg-[#F7FBFD] text-left text-xs font-semibold uppercase text-zinc-500">
                 <tr>
                     <th class="px-4 py-3">Nama</th>
+                    <th class="px-4 py-3">No. HP</th>
                     <th class="px-4 py-3">Email</th>
-                    <th class="px-4 py-3">Organisasi</th>
-                    <th class="px-4 py-3">Role</th>
+                    <th class="px-4 py-3">Instansi</th>
                     <th class="px-4 py-3">Status</th>
                     <th class="px-4 py-3"></th>
                 </tr>
@@ -21,10 +21,16 @@
                 @foreach ($users as $user)
                     <tr>
                         <td class="px-4 py-3 font-medium">{{ $user->name }}</td>
+                        <td class="px-4 py-3">{{ $user->phone ?: '-' }}</td>
                         <td class="px-4 py-3">{{ $user->email }}</td>
                         <td class="px-4 py-3 text-zinc-500">{{ $user->organization?->name ?? '-' }}</td>
-                        <td class="px-4 py-3">{{ $user->roles->pluck('name')->join(', ') ?: '-' }}</td>
-                        <td class="px-4 py-3"><x-status-badge :active="$user->is_active" /></td>
+                        <td class="px-4 py-3">
+                            @if ($user->is_active)
+                                <x-status-badge :active="true" />
+                            @else
+                                <span class="inline-flex rounded-full bg-[#FFF8D9] px-2 py-1 text-xs font-semibold text-[#8A6500]">Menunggu verifikasi</span>
+                            @endif
+                        </td>
                         <td class="px-4 py-3 text-right"><a href="{{ route('admin.users.edit', $user) }}" class="font-medium text-zinc-900 underline">Edit</a></td>
                     </tr>
                 @endforeach

@@ -24,18 +24,26 @@
         </div>
     </div>
 
-    <div class="grid gap-4 sm:grid-cols-2">
-        <div>
-            <label class="text-sm font-medium" for="password">Password</label>
-            <input id="password" name="password" type="password" class="mt-1 w-full rounded-md border border-[#B8E2F0] px-3 py-2">
-            @error('password') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-        </div>
-
-        <div>
-            <label class="text-sm font-medium" for="password_confirmation">Konfirmasi Password</label>
-            <input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 w-full rounded-md border border-[#B8E2F0] px-3 py-2">
-        </div>
+    <div>
+        <label class="text-sm font-medium" for="phone">Nomor HP</label>
+        <input id="phone" name="phone" type="tel" value="{{ old('phone', $user->phone) }}" class="mt-1 w-full rounded-md border border-[#B8E2F0] px-3 py-2">
+        @error('phone') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
     </div>
+
+    @if (! $user->exists)
+        <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+                <label class="text-sm font-medium" for="password">Password</label>
+                <input id="password" name="password" type="password" class="mt-1 w-full rounded-md border border-[#B8E2F0] px-3 py-2">
+                @error('password') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+            </div>
+
+            <div>
+                <label class="text-sm font-medium" for="password_confirmation">Konfirmasi Password</label>
+                <input id="password_confirmation" name="password_confirmation" type="password" class="mt-1 w-full rounded-md border border-[#B8E2F0] px-3 py-2">
+            </div>
+        </div>
+    @endif
 
     <div>
         <div class="text-sm font-medium">Role</div>

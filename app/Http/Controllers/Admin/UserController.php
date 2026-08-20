@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ResetUserPasswordRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Organization;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -62,18 +62,29 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $data = Arr::except($request->safe()->except(['roles', 'password_confirmation']), ['password']);
-
-        if ($request->filled('password')) {
-            $data['password'] = $request->string('password')->toString();
-        }
-
+        $data = $request->safe()->except(['roles', 'password_confirmation']);
         $data['is_active'] = $request->boolean('is_active');
 
         $user->update($data);
         $user->roles()->sync($request->validated('roles', []));
 
         return redirect()->route('admin.users.index')->with('status', 'User berhasil diperbarui.');
+    }
+
+    public function editPassword(User $user): View
+    {
+        $this->authorize('update', $user);
+
+        return view('admin.users.reset-password', ['user' => $user]);
+    }
+
+    public function resetPassword(ResetUserPasswordRequest $request, User $user): RedirectResponse
+    {
+        $this->authorize('update', $user);
+
+        $user->update(['password' => $request->string('password')->toString()]);
+
+        return redirect()->route('admin.users.index')->with('status', 'Password user berhasil direset.');
     }
 
     private function filterAssignableRoles($query)

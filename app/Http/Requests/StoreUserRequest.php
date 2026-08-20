@@ -22,6 +22,7 @@ class StoreUserRequest extends FormRequest
         return [
             'organization_id' => ['nullable', 'exists:organizations,id'],
             'name' => ['required', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:25', 'regex:/^[0-9+()\-\s]+$/'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'roles' => ['array'],

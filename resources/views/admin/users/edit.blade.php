@@ -6,4 +6,6 @@
         @method('PUT')
         @include('admin.users.partials.form')
     </form>
+
+    <a href="{{ route('admin.users.password.edit', $user) }}" class="mt-4 inline-block rounded-md border border-[#B8E2F0] px-4 py-2 text-sm font-semibold hover:bg-[#F7FBFD]">Reset Password</a>
 @endsection

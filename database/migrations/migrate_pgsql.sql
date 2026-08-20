@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
   id BIGSERIAL PRIMARY KEY,
   organization_id BIGINT NULL,
   name VARCHAR(255) NOT NULL,
+  phone VARCHAR(25) NULL,
   email VARCHAR(255) NOT NULL UNIQUE,
   email_verified_at TIMESTAMP NULL,
   password VARCHAR(255) NOT NULL,
@@ -16,6 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP NULL,
   updated_at TIMESTAMP NULL
 );
+ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(25) NULL;
 CREATE INDEX idx_users_organization_id ON users(organization_id);
 CREATE INDEX idx_users_is_active ON users(is_active);
 

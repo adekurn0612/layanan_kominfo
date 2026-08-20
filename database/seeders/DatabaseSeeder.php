@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
             ['module' => 'Kategori Layanan', 'name' => 'Kelola Kategori Layanan', 'code' => 'service-categories.manage'],
             ['module' => 'Layanan', 'name' => 'Lihat Layanan', 'code' => 'services.view'],
             ['module' => 'Layanan', 'name' => 'Kelola Layanan', 'code' => 'services.manage'],
+            ['module' => 'Tiket', 'name' => 'Lihat Tiket', 'code' => 'tickets.view'],
+            ['module' => 'Tiket', 'name' => 'Tindak Lanjut Tiket', 'code' => 'tickets.manage'],
         ])->mapWithKeys(fn (array $permission) => [
             $permission['code'] => Permission::updateOrCreate(
                 ['code' => $permission['code']],
@@ -62,6 +64,8 @@ class DatabaseSeeder extends Seeder
             'service-categories.manage',
             'services.view',
             'services.manage',
+            'tickets.view',
+            'tickets.manage',
         ])->pluck('id'));
 
         $pemkab = Organization::updateOrCreate(
