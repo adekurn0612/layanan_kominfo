@@ -3,9 +3,6 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/bengkuluselatan/public_html/layanan/layanan_kominfov2
     - cd $DEPLOYPATH
-    - composer install --no-dev --optimize-autoloader --no-interaction
-    - npm ci
-    - npm run build
     - php artisan optimize:clear
     - php artisan config:cache
     - php artisan route:cache
