@@ -4,8 +4,6 @@ deployment:
     - export DEPLOYPATH=/home/bengkuluselatan/public_html/layanan/layanan_kominfov2
     - cd $DEPLOYPATH
     - php artisan optimize:clear
-    - php artisan app:baseline-existing-database
-    - php artisan migrate --force
     - php artisan config:cache
     - php artisan route:cache
     - php artisan view:cache
