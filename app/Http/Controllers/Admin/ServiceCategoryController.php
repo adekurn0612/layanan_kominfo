@@ -9,7 +9,6 @@ use App\Models\ServiceCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -86,15 +85,16 @@ class ServiceCategoryController extends Controller
         }
 
         $filename = Str::uuid().'.'.$image->extension();
-        $path = Storage::disk('public')->putFileAs(self::UPLOAD_DIRECTORY, $image, $filename);
+        $directory = public_path(self::UPLOAD_DIRECTORY);
+        File::ensureDirectoryExists($directory);
 
-        if ($path === false) {
+        if (! $image->move($directory, $filename)) {
             throw ValidationException::withMessages([
-                'image' => 'Gambar tidak dapat disimpan. Pastikan storage/app/public dapat ditulis.',
+                'image' => 'Gambar tidak dapat disimpan. Pastikan folder public/images/service-categories dapat ditulis.',
             ]);
         }
 
-        return $path;
+        return self::UPLOAD_DIRECTORY.'/'.$filename;
     }
 
     private function deleteUploadedImage(?string $path): void
@@ -103,7 +103,6 @@ class ServiceCategoryController extends Controller
             return;
         }
 
-        Storage::disk('public')->delete($path);
         File::delete(public_path($path));
     }
 }
