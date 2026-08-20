@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'welcome')->name('welcome');
 Route::view('/berita', 'news.coming-soon')->name('news.index');
 Route::get('/cek-tiket', TicketLookupController::class)->name('tickets.lookup');
+Route::get('/cek-tiket/{ticket:uuid}/qr', [TicketLookupController::class, 'qr'])->name('tickets.qr');
+Route::get('/cek-tiket/{ticket:uuid}/qr/download', [TicketLookupController::class, 'downloadQr'])->name('tickets.qr.download');
 Route::get('/cek-tiket/{ticket:uuid}/follow-ups/{followUp}/file', [TicketLookupController::class, 'downloadFollowUpFile'])
     ->middleware('auth')
     ->name('tickets.follow-ups.file');

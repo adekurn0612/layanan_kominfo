@@ -33,6 +33,11 @@
                     <x-ui.button type="submit" class="w-full md:w-auto">Cek Tiket</x-ui.button>
                 </div>
             </form>
+            <div class="mt-4 border-t border-[#EAF8FC] pt-4">
+                <label for="qr-upload" class="mb-1 block text-sm font-medium text-zinc-700">Atau upload QR tiket</label>
+                <input id="qr-upload" type="file" accept="image/*" class="block w-full rounded-md border border-[#B8E2F0] px-3 py-2 text-sm">
+                <p id="qr-upload-status" class="mt-1 text-xs text-zinc-500">QR akan dibaca otomatis untuk mengisi UUID.</p>
+            </div>
         </x-ui.card>
 
         @if ($ticket)
@@ -107,4 +112,61 @@
             </x-ui.card>
         @endif
     </div>
+
+    @if ($showCreatedModal)
+        <div id="ticket-created-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#0B3558]/60 px-5" role="dialog" aria-modal="true" aria-labelledby="ticket-created-title">
+            <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-2xl">
+                <div class="text-center">
+                    <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#EAF8FC] text-2xl text-[#137CBD]">&#10003;</div>
+                    <h2 id="ticket-created-title" class="mt-4 text-xl font-semibold text-[#0B3558]">Terima kasih, tiket berhasil dibuat</h2>
+                    <p class="mt-2 text-sm text-zinc-600">Simpan UUID berikut untuk memeriksa status tiket Anda.</p>
+                    <p class="mt-4 break-all rounded-md bg-[#F7FBFD] px-3 py-3 font-mono text-sm font-semibold text-zinc-900">{{ $ticket->uuid }}</p>
+                    <div class="mt-5 flex flex-wrap justify-center gap-3">
+                        <a href="{{ route('tickets.qr.download', $ticket) }}" class="rounded-md bg-[#137CBD] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0D6EAE]">Download QR Tiket</a>
+                        <button type="button" data-close-ticket-modal class="rounded-md border border-[#B8E2F0] px-4 py-2 text-sm font-semibold text-zinc-700 hover:bg-[#F7FBFD]">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script>
+        document.querySelector('[data-close-ticket-modal]')?.addEventListener('click', () => {
+            document.getElementById('ticket-created-modal')?.remove();
+        });
+
+        document.getElementById('qr-upload')?.addEventListener('change', function (event) {
+            const file = event.target.files?.[0];
+            const status = document.getElementById('qr-upload-status');
+            if (!file) return;
+
+            const image = new Image();
+            const reader = new FileReader();
+            reader.onload = () => {
+                image.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = image.naturalWidth;
+                    canvas.height = image.naturalHeight;
+                    const context = canvas.getContext('2d');
+                    context.drawImage(image, 0, 0);
+                    const result = jsQR(context.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
+                    if (!result?.data) {
+                        status.textContent = 'QR tidak dapat dibaca. Silakan upload gambar QR yang jelas.';
+                        status.className = 'mt-1 text-xs text-red-600';
+                        return;
+                    }
+
+                    const url = new URL(result.data, window.location.origin);
+                    const uuid = url.searchParams.get('uuid') || result.data.trim();
+                    document.querySelector('input[name="uuid"]').value = uuid;
+                    document.querySelector('form[action="{{ route('tickets.lookup') }}"]').submit();
+                };
+                image.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+@endpush
