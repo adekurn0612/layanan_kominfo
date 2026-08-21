@@ -22,7 +22,7 @@
                 @foreach ($categories as $category)
                     <tr>
                         <td class="px-4 py-3">
-                            <img src="{{ $category->image_url }}" alt="Gambar {{ $category->name }}" class="h-12 w-20 rounded-md border border-[#CDEAF5] object-cover">
+                            <img src="{{ $category->image_url }}" alt="Gambar {{ $category->name }}" loading="lazy" decoding="async" class="h-12 w-20 rounded-md border border-[#CDEAF5] object-cover">
                         </td>
                         <td class="px-4 py-3 font-medium">{{ $category->name }}</td>
                         <td class="px-4 py-3">{{ $category->code }}</td>

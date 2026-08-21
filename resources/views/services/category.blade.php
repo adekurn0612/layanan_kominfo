@@ -22,7 +22,7 @@
                         <path d="M56 108C56 108 68 96 68 84C68 72 56 60 56 60C56 60 44 72 44 84C44 96 56 108 56 108Z" opacity="0.6"/>
                     </svg>
                     <div class="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-md bg-white p-2">
-                        <img src="{{ $category->image_url }}" alt="Logo {{ $category->name }}" class="max-h-full max-w-full object-contain">
+                        <img src="{{ $category->image_url }}" alt="Logo {{ $category->name }}" loading="lazy" decoding="async" class="max-h-full max-w-full object-contain">
                     </div>
                 </div>
                 <div class="text-center sm:text-left">

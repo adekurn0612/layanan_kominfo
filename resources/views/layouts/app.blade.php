@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ config('app.name') }}</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-h-screen bg-[#F7FBFD] text-zinc-900 antialiased">
         <div class="min-h-screen @auth lg:flex @endauth">

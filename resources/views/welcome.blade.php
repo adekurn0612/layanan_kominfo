@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ config('app.name') }}</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-h-screen bg-[#F7FBFD] text-zinc-950 antialiased">
         <header class="border-b border-[#D7EDF6] bg-white">

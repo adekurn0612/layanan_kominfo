@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Berita - {{ config('app.name') }}</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="min-h-screen bg-[#F7FBFD] text-zinc-950 antialiased">
         <header class="border-b border-[#D7EDF6] bg-white">
@@ -45,7 +45,7 @@
                         <div class="w-1/3 bg-[#F5C521]"></div>
                     </div>
                     <div class="flex items-center justify-center rounded-lg bg-white p-5">
-                        <img src="{{ asset('images/logo-bengkulu-selatan.png') }}" alt="Logo Kabupaten Bengkulu Selatan" class="h-40 w-40 object-contain">
+                        <img src="{{ asset('images/logo-bengkulu-selatan.webp') }}" alt="Logo Kabupaten Bengkulu Selatan" class="h-40 w-40 object-contain">
                     </div>
                     <div class="mt-5 text-sm font-semibold uppercase tracking-[0.16em] text-[#A8E8F7]">Kabupaten Bengkulu Selatan</div>
                     <p class="mt-2 text-sm leading-6 text-zinc-300">Konten berita akan segera hadir.</p>

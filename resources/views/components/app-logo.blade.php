@@ -14,7 +14,7 @@
 
 <div {{ $attributes->merge(['class' => 'flex min-w-0 items-center gap-3']) }}>
     <img
-        src="{{ asset('images/logo-bengkulu-selatan.png') }}"
+        src="{{ asset('images/logo-bengkulu-selatan.webp') }}"
         alt="Logo Kabupaten Bengkulu Selatan"
         class="{{ $imageClasses }} shrink-0 object-contain"
     >
