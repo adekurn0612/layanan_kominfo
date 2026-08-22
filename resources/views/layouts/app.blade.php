@@ -50,10 +50,11 @@
                                 <x-app-logo size="sm" />
                             </a>
                             <nav class="flex flex-wrap items-center justify-end gap-2 text-sm font-medium text-zinc-700">
-                                <a href="{{ route('services.index') }}" class="rounded-md px-3 py-2 transition hover:bg-[#EAF8FC] hover:text-[#137CBD]">Katalog Layanan</a>
-                                <a href="{{ route('news.index') }}" class="rounded-md px-3 py-2 transition hover:bg-[#EAF8FC] hover:text-[#137CBD]">Berita</a>
-                                <a href="{{ route('tickets.lookup') }}" class="rounded-md px-3 py-2 transition hover:bg-[#EAF8FC] hover:text-[#137CBD]">Cek Tiket</a>
-                                <a href="{{ route('login') }}" class="rounded-md bg-[#137CBD] px-3 py-2 text-white transition hover:bg-[#0D6EAE]">Masuk</a>
+                                <a href="{{ route('welcome') }}" @class(['rounded-md px-3 py-2 transition hover:bg-[#EAF8FC] hover:text-[#137CBD]', 'bg-[#EAF8FC] text-[#137CBD]' => request()->routeIs('welcome')]) @if(request()->routeIs('welcome')) aria-current="page" @endif>Beranda</a>
+                                <a href="{{ route('services.index') }}" @class(['rounded-md px-3 py-2 transition hover:bg-[#EAF8FC] hover:text-[#137CBD]', 'bg-[#EAF8FC] text-[#137CBD]' => request()->routeIs('services.*')]) @if(request()->routeIs('services.*')) aria-current="page" @endif>Katalog Layanan</a>
+                                <a href="{{ route('news.index') }}" @class(['rounded-md px-3 py-2 transition hover:bg-[#EAF8FC] hover:text-[#137CBD]', 'bg-[#EAF8FC] text-[#137CBD]' => request()->routeIs('news.*')]) @if(request()->routeIs('news.*')) aria-current="page" @endif>Berita</a>
+                                <a href="{{ route('tickets.lookup') }}" @class(['rounded-md px-3 py-2 transition hover:bg-[#EAF8FC] hover:text-[#137CBD]', 'bg-[#EAF8FC] text-[#137CBD]' => request()->routeIs('tickets.lookup')]) @if(request()->routeIs('tickets.lookup')) aria-current="page" @endif>Cek Tiket</a>
+                                <a href="{{ route('login') }}" class="rounded-md bg-[#137CBD] px-3 py-2 text-white transition hover:bg-[#0D6EAE]" @if(request()->routeIs('login')) aria-current="page" @endif>Masuk</a>
                             </nav>
                         </div>
                     </header>
