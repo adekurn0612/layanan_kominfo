@@ -100,6 +100,10 @@ class PhaseTwoTest extends TestCase
 
         $this->assertSame('submitted', $ticket->status);
         $this->assertSame('Portal Desa', $ticket->form_data['nama_aplikasi']);
+        $this->assertTrue($ticket->target_deadline_at->equalTo(
+            $ticket->submitted_at->copy()->addHours($service->sla_hours)
+        ));
+        $this->assertSame('pending', $ticket->sla_status);
 
         $this->get(route('tickets.lookup', ['uuid' => $ticket->uuid]))
             ->assertOk()
@@ -132,5 +136,42 @@ class PhaseTwoTest extends TestCase
 
         $response->assertRedirect(route('tickets.lookup', ['uuid' => $ticket->uuid]));
         $this->assertSame('surat.pdf', $ticket->form_data['surat_permohonan']['original_name']);
+    }
+
+    public function test_sla_tracks_first_follow_up_and_ticket_completion(): void
+    {
+        $this->seed();
+
+        $admin = User::where('email', 'admin@pemda.test')->firstOrFail();
+        $service = Service::where('code', 'pembuatan-website-desa')->firstOrFail();
+        $ticket = Ticket::create([
+            'service_id' => $service->id,
+            'user_id' => $admin->id,
+            'organization_id' => $admin->organization_id,
+            'status' => 'submitted',
+            'form_data' => [],
+        ]);
+
+        $this->assertNotNull($ticket->target_deadline_at);
+        $this->assertSame('pending', $ticket->sla_status);
+
+        $this->actingAs($admin)
+            ->post(route('admin.tickets.follow-ups.store', $ticket), ['comment' => 'Permohonan sedang ditinjau.'])
+            ->assertRedirect(route('admin.tickets.edit', $ticket));
+
+        $ticket->refresh();
+        $this->assertNotNull($ticket->first_response_at);
+        $this->assertNotNull($ticket->response_hours);
+        $this->assertSame('in_progress', $ticket->sla_status);
+
+        $this->put(route('admin.tickets.update', $ticket), ['status' => 'completed'])
+            ->assertRedirect(route('admin.tickets.edit', $ticket));
+
+        $ticket->refresh();
+        $this->assertNotNull($ticket->resolved_at);
+        $this->assertNotNull($ticket->closed_at);
+        $this->assertNotNull($ticket->resolution_hours);
+        $this->assertSame('on_time', $ticket->sla_status);
+        $this->assertFalse($ticket->sla_breached);
     }
 }

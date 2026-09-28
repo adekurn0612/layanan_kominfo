@@ -163,5 +163,31 @@
         </a>
     · All rights reserved
 </footer>
+        <div id="survey-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-zinc-950/70 p-4" role="dialog" aria-modal="true" aria-labelledby="survey-title">
+            <div class="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-lg bg-white shadow-2xl">
+                <div class="flex items-center justify-between border-b border-zinc-200 px-4 py-3">
+                    <h2 id="survey-title" class="text-base font-semibold text-zinc-900">Survei Layanan Digital</h2>
+                    <button type="button" id="close-survey-modal" class="rounded-md px-3 py-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-100" aria-label="Tutup survei">Tutup</button>
+                </div>
+                <iframe
+                    class="min-h-[65vh] w-full flex-1 border-0"
+                    src="https://surveidigital.spbe.go.id/embed/survey/eyJzdXJ2ZXlfaWQiOjIsInNlcnZpY2VfaWQiOjEwNjEsImhvc3QiOiJodHRwczovL2xheWFuYW4uYmVuZ2t1bHVzZWxhdGFua2FiLmdvLmlkLyIsImtleSI6ImJtUWk2djljIn0=/embed/view/?jenis_layanan=Layanan Digital"
+                    title="Survei Layanan Digital"
+                    loading="lazy"
+                    allowfullscreen
+                ></iframe>
+            </div>
+        </div>
+        <script>
+            window.setTimeout(() => {
+                const surveyModal = document.getElementById('survey-modal');
+                surveyModal?.classList.remove('hidden');
+                surveyModal?.classList.add('flex');
+            }, 5000);
+
+            document.getElementById('close-survey-modal')?.addEventListener('click', () => {
+                document.getElementById('survey-modal')?.classList.add('hidden');
+            });
+        </script>
     </body>
 </html>

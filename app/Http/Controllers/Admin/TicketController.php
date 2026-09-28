@@ -58,9 +58,19 @@ class TicketController extends Controller
     {
         $this->authorize('update', $ticket);
 
-        $ticket->update($request->validate([
+        $data = $request->validate([
             'status' => ['required', 'string', 'in:' . implode(',', array_keys(self::STATUSES))],
-        ]));
+        ]);
+
+        $ticket->status = $data['status'];
+        $ticket->resolved_at = $ticket->status === 'completed'
+            ? ($ticket->resolved_at ?? now())
+            : null;
+        $ticket->closed_at = in_array($ticket->status, ['completed', 'rejected'], true)
+            ? ($ticket->closed_at ?? now())
+            : null;
+        $ticket->calculateSla();
+        $ticket->save();
 
         return redirect()->route('admin.tickets.edit', $ticket)->with('status', 'Status tiket berhasil diperbarui.');
     }
@@ -76,7 +86,7 @@ class TicketController extends Controller
         ]);
 
         $file = $request->file('file');
-        $ticket->followUps()->create([
+        $followUp = $ticket->followUps()->create([
             'user_id' => $request->user()->id,
             'comment' => $data['comment'] ?? null,
             'is_public' => $request->boolean('is_public'),
@@ -84,6 +94,10 @@ class TicketController extends Controller
             'file_name' => $file?->getClientOriginalName(),
             'file_mime' => $file?->getMimeType(),
         ]);
+
+        $ticket->first_response_at ??= $followUp->created_at;
+        $ticket->calculateSla();
+        $ticket->save();
 
         return redirect()->route('admin.tickets.edit', $ticket)->with('status', 'Tindak lanjut tiket berhasil ditambahkan.');
     }

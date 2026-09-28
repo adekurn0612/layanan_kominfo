@@ -50,6 +50,11 @@ class Ticket extends Model
             $ticket->uuid ??= (string) Str::uuid();
             $ticket->submitted_at ??= now();
         });
+
+        static::created(function (Ticket $ticket): void {
+            $ticket->calculateSla();
+            $ticket->saveQuietly();
+        });
     }
 
     public function service(): BelongsTo
@@ -94,6 +99,11 @@ class Ticket extends Model
         if ($this->target_deadline_at && $this->resolved_at) {
             $this->sla_breached = $this->resolved_at->greaterThan($this->target_deadline_at);
             $this->sla_status = $this->sla_breached ? 'breached' : 'on_time';
+        } elseif ($this->target_deadline_at) {
+            $this->sla_breached = now()->greaterThan($this->target_deadline_at);
+            $this->sla_status = $this->sla_breached
+                ? 'breached'
+                : ($this->first_response_at ? 'in_progress' : 'pending');
         }
     }
 }
