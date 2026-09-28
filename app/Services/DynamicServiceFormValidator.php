@@ -40,7 +40,7 @@ class DynamicServiceFormValidator
             'date' => 'date',
             'datetime' => 'date',
             'phone' => 'regex:/^[0-9+().\\-\\s]+$/',
-            'file' => 'file',
+            'file' => 'file|mimes:jpg,jpeg,png,pdf|max:5120',
             'checkbox' => 'array',
             default => 'string',
         };

@@ -37,7 +37,7 @@ class ServiceApplicationController extends Controller
 
         return redirect()
             ->route('tickets.lookup', ['uuid' => $ticket->uuid])
-            ->with('status', "Tiket berhasil dibuat. Simpan UUID tiket: {$ticket->uuid}")
+            ->with('status', "Tiket berhasil dibuat. Simpan Kode Unik tiket: {$ticket->uuid}")
             ->with('ticket_created_uuid', $ticket->uuid);
     }
 

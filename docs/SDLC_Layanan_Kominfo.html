@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Dokumen SDLC - Portal Layanan Kominfo</title>
+<style>
+@page { size: A4; margin: 2.2cm 2cm 2cm 2cm; }
+body { font-family: Calibri, Arial, sans-serif; color: #25313b; font-size: 10.5pt; line-height: 1.35; }
+h1 { color: #0b5360; font-size: 24pt; margin-top: 0; border-bottom: 2px solid #e2a93b; padding-bottom: 8pt; }
+h2 { color: #0b5360; font-size: 16pt; border-bottom: 1px solid #c8d8da; padding-bottom: 4pt; margin-top: 20pt; }
+h3 { color: #a4542b; font-size: 12pt; margin-top: 14pt; }
+p { margin: 5pt 0 8pt; }
+li { margin: 3pt 0; }
+table { border-collapse: collapse; width: 100%; margin: 8pt 0 12pt; }
+th { background: #0b5360; color: white; font-weight: bold; }
+th, td { border: 1px solid #aabdc1; padding: 5pt; vertical-align: top; }
+tr:nth-child(even) td { background: #f1f6f6; }
+.cover { text-align: center; padding-top: 100pt; page-break-after: always; }
+.cover .kicker { color: #a4542b; font-weight: bold; letter-spacing: 1pt; text-transform: uppercase; }
+.cover h1 { border: 0; font-size: 30pt; margin: 18pt 0; }
+.cover .subtitle { font-size: 15pt; color: #56727a; }
+.cover .meta { margin-top: 100pt; color: #56727a; }
+.callout { background: #fff5dc; border-left: 5px solid #e2a93b; padding: 8pt 10pt; margin: 10pt 0; }
+.small { font-size: 9pt; color: #56727a; }
+.pagebreak { page-break-before: always; }
+code { font-family: Consolas, monospace; font-size: 9pt; color: #7d3f28; }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="kicker">Software Development Life Cycle</div>
+  <h1>Portal Layanan Kominfo</h1>
+  <div class="subtitle">Dokumen proses pengembangan, pengujian, rilis, dan pemeliharaan sistem</div>
+  <div class="meta">Versi 1.0<br>26 Agustus 2026<br>Status: Baseline pengembangan</div>
+</div>
+
+<h1>Dokumen SDLC</h1>
+<table><tr><th>Informasi</th><th>Nilai</th></tr>
+<tr><td>Nama sistem</td><td>Portal Layanan Kominfo</td></tr>
+<tr><td>Jenis sistem</td><td>Aplikasi web layanan publik dan manajemen tiket</td></tr>
+<tr><td>Teknologi teridentifikasi</td><td>Laravel 12, PHP 8.2+, Vite 7, Tailwind CSS 4, PHPUnit 11, Endroid QR Code 6</td></tr>
+<tr><td>Dokumen pemilik</td><td>Tim pengelola layanan / Dinas Kominfo</td></tr>
+<tr><td>Versi dokumen</td><td>1.0</td></tr>
+<tr><td>Tanggal</td><td>26 Agustus 2026</td></tr></table>
+
+<div class="callout"><b>Catatan status:</b> Dokumen ini disusun dari struktur source code, route, migration, controller, model, policy, dan feature test yang tersedia pada repository. Item yang memerlukan keputusan organisasi atau bukti operasional diberi status “perlu dikonfirmasi”, bukan dianggap sudah tersedia.</div>
+
+<h2>Daftar Isi</h2>
+<ol><li>Ringkasan dan tujuan</li><li>Ruang lingkup dan aktor</li><li>Kebutuhan sistem</li><li>Arsitektur dan desain</li><li>Siklus pengembangan</li><li>Keamanan dan privasi</li><li>Strategi pengujian</li><li>Deployment dan operasi</li><li>Pemeliharaan dan manajemen perubahan</li><li>Risiko, RACI, dan traceability</li><li>Kriteria penerimaan dan tindak lanjut</li></ol>
+
+<h2>1. Ringkasan dan Tujuan</h2>
+<p>Portal Layanan Kominfo menyediakan katalog layanan teknologi informasi, formulir pengajuan yang dikonfigurasi dari data layanan, pembuatan tiket ber-UUID, pelacakan status, QR code tiket, serta pengelolaan layanan dan tiket oleh administrator.</p>
+<p>Tujuan SDLC ini adalah memastikan perubahan sistem direncanakan, dibangun, diuji, dirilis, dan dipelihara secara terkendali. Dokumen ini juga menjadi acuan pembagian tanggung jawab dan bukti minimum sebelum perubahan masuk produksi.</p>
+<h3>Prinsip pengembangan</h3>
+<ul><li>Berbasis kebutuhan layanan dan pengalaman pemohon.</li><li>Validasi server-side sebagai sumber kebenaran.</li><li>Least privilege untuk akses administrasi.</li><li>Perubahan kecil, dapat ditelusuri, dan dapat dipulihkan.</li><li>Data pemohon dan dokumen lampiran diperlakukan sebagai data terbatas.</li></ul>
+
+<h2>2. Ruang Lingkup dan Aktor</h2>
+<h3>2.1 Dalam ruang lingkup</h3>
+<ul><li>Halaman publik: beranda, katalog layanan, kategori, detail layanan, berita placeholder, dan cek tiket.</li><li>Autentikasi: registrasi, login, logout, throttling login/registrasi, serta dashboard.</li><li>Pengajuan layanan oleh pengguna terautentikasi menggunakan field dinamis dari database.</li><li>Tiket: UUID, status <code>submitted</code>, <code>in_review</code>, <code>in_progress</code>, <code>completed</code>, dan <code>rejected</code>.</li><li>Tindak lanjut tiket berupa komentar atau file, dengan visibilitas publik/internal.</li><li>Administrasi organisasi, pengguna, role, permission, kategori, layanan, field, requirement, tiket, dan tindak lanjut.</li></ul>
+<h3>2.2 Di luar atau perlu dikonfirmasi</h3>
+<ul><li>Notifikasi email/SMS/WhatsApp, SLA escalation otomatis, dan integrasi sistem eksternal belum terbukti pada source yang dipindai.</li><li>Rencana backup, monitoring produksi, pemulihan bencana, dan persetujuan operasional perlu ditetapkan oleh pemilik sistem.</li><li>Detail klasifikasi data, retensi, dasar hukum, dan petugas privasi perlu dikonfirmasi.</li></ul>
+<h3>2.3 Aktor</h3>
+<table><tr><th>Aktor</th><th>Kebutuhan / kewenangan</th></tr>
+<tr><td>Pemohon</td><td>Melihat layanan, mengisi pengajuan, menerima UUID, dan melacak tiket.</td></tr>
+<tr><td>Admin layanan</td><td>Memverifikasi, memproses, memperbarui status, dan menambahkan tindak lanjut.</td></tr>
+<tr><td>Admin sistem</td><td>Mengelola master layanan, kategori, field, requirement, organisasi, pengguna, role, dan permission.</td></tr>
+<tr><td>Pengelola produk</td><td>Menetapkan prioritas, menerima hasil sprint/rilis, dan menyetujui perubahan.</td></tr>
+<tr><td>DevOps/infrastruktur</td><td>Menyediakan environment, deployment, backup, monitoring, dan rollback.</td></tr></table>
+
+<h2>3. Kebutuhan Sistem</h2>
+<h3>3.1 Kebutuhan fungsional</h3>
+<table><tr><th>ID</th><th>Kebutuhan</th><th>Bukti implementasi</th></tr>
+<tr><td>FR-01</td><td>Pengunjung dapat melihat katalog, kategori, detail layanan, requirement, dan SLA.</td><td><code>ServiceCatalogController</code>, route <code>/services</code>.</td></tr>
+<tr><td>FR-02</td><td>Pemohon wajib login untuk mengajukan layanan.</td><td>Middleware <code>auth</code> dan redirect ke login.</td></tr>
+<tr><td>FR-03</td><td>Form pengajuan dibentuk dan divalidasi dari field aktif layanan.</td><td><code>DynamicServiceFormValidator</code>.</td></tr>
+<tr><td>FR-04</td><td>Sistem membuat tiket unik dan menyimpan data pengajuan.</td><td>Model <code>Ticket</code>, UUID unik, JSON <code>form_data</code>.</td></tr>
+<tr><td>FR-05</td><td>Pemohon dapat mencari tiket berdasarkan UUID dan mengakses QR code.</td><td><code>TicketLookupController</code>.</td></tr>
+<tr><td>FR-06</td><td>Admin berwenang dapat mengelola tiket, status, komentar, dan file tindak lanjut.</td><td><code>Admin\TicketController</code> dan policy.</td></tr>
+<tr><td>FR-07</td><td>Akses modul admin dibatasi permission.</td><td>Middleware <code>can:view-admin</code> dan policy.</td></tr></table>
+<h3>3.2 Kebutuhan nonfungsional</h3>
+<table><tr><th>ID</th><th>Kebutuhan</th><th>Target / verifikasi</th></tr>
+<tr><td>NFR-01</td><td>Keamanan akses</td><td>Authentication, authorization, CSRF, throttle, validasi input; diuji pada feature test dan security checklist.</td></tr>
+<tr><td>NFR-02</td><td>Integritas data</td><td>Foreign key, unique code/UUID, status terkontrol, dan transaksi bila alur berkembang menjadi multi-langkah.</td></tr>
+<tr><td>NFR-03</td><td>Usability</td><td>Alur katalog sampai cek tiket dapat diselesaikan pemohon; uji acceptance pada perangkat desktop dan mobile.</td></tr>
+<tr><td>NFR-04</td><td>Maintainability</td><td>Perubahan layanan dilakukan melalui master data dan test suite; style diperiksa dengan Pint.</td></tr>
+<tr><td>NFR-05</td><td>Availability dan recovery</td><td>Target RTO/RPO, backup, dan monitoring ditetapkan sebelum go-live produksi.</td></tr></table>
+
+<h2>4. Arsitektur dan Desain</h2>
+<p>Aplikasi mengikuti pola MVC Laravel: route meneruskan request ke controller, controller memuat model/service, validasi dilakukan oleh validator, policy membatasi akses, dan view menyajikan antarmuka web. Vite menangani asset frontend.</p>
+<h3>4.1 Komponen utama</h3>
+<table><tr><th>Komponen</th><th>Tanggung jawab</th></tr>
+<tr><td>Public web</td><td>Katalog layanan, detail requirement, login/register, cek tiket, QR.</td></tr>
+<tr><td>Application layer</td><td>Pengajuan layanan, normalisasi form, pembuatan tiket, status, tindak lanjut.</td></tr>
+<tr><td>Authorization</td><td>Role/permission dan policy organisasi, user, service, ticket, serta modul admin.</td></tr>
+<tr><td>Data layer</td><td>Users, organizations, roles, permissions, service categories/services/fields/requirements, tickets, follow-ups.</td></tr>
+<tr><td>File storage</td><td>Lampiran pengajuan dan file tindak lanjut disimpan pada storage aplikasi dengan metadata file.</td></tr></table>
+<h3>4.2 Model data ringkas</h3>
+<p>Organisasi memiliki user dan dapat terkait dengan tiket. Kategori memiliki banyak service. Service memiliki field dinamis dan requirement. Service menghasilkan banyak ticket. Ticket memiliki follow-up yang dibuat oleh user. UUID ticket bersifat unik sebagai identifier pelacakan publik.</p>
+
+<h2>5. Siklus Pengembangan</h2>
+<table><tr><th>Fase</th><th>Aktivitas wajib</th><th>Output / gate</th></tr>
+<tr><td>1. Inisiasi</td><td>Tetapkan masalah, pemilik, tujuan, batasan, risiko awal, dan indikator keberhasilan.</td><td>Project charter disetujui.</td></tr>
+<tr><td>2. Analisis kebutuhan</td><td>Petakan aktor, journey pemohon, status tiket, aturan field, requirement, SLA, dan klasifikasi data.</td><td>Backlog dan acceptance criteria.</td></tr>
+<tr><td>3. Desain</td><td>Rancang model data, authorization matrix, alur error, storage, UX, dan deployment topology.</td><td>Design review disetujui.</td></tr>
+<tr><td>4. Implementasi</td><td>Kerjakan perubahan kecil; gunakan migration, model, policy, controller/service, view, dan test yang sesuai.</td><td>Pull request siap direview.</td></tr>
+<tr><td>5. Verifikasi</td><td>Jalankan unit/feature test, lint, build asset, security checks, dan UAT berbasis acceptance criteria.</td><td>Test report dan defect disposition.</td></tr>
+<tr><td>6. Rilis</td><td>Backup, migrasi, build, konfigurasi environment, smoke test, dan komunikasi rilis.</td><td>Go-live approval.</td></tr>
+<tr><td>7. Operasi</td><td>Pantau error, performa, storage, status tiket, dan incident; lakukan rollback jika gate gagal.</td><td>Operational review.</td></tr>
+<tr><td>8. Pemeliharaan</td><td>Triage bug, patch keamanan, perubahan layanan, peningkatan UX, dan evaluasi SLA.</td><td>Change record dan release note.</td></tr></table>
+<h3>Definition of Done</h3>
+<ul><li>Kebutuhan dan acceptance criteria terhubung dengan implementasi.</li><li>Validasi dan authorization sudah diuji pada jalur sukses dan gagal.</li><li>Migration dapat dijalankan pada environment bersih dan tidak merusak data yang ada.</li><li>Test, lint, dan build lulus; dokumentasi perubahan diperbarui.</li><li>Reviewer dan pemilik produk menyetujui; risiko rilis memiliki mitigasi.</li></ul>
+
+<h2>6. Keamanan dan Privasi</h2>
+<ul><li>Gunakan akun dengan role minimal; audit perubahan role/permission dan tindakan admin.</li><li>Jangan menaruh secret di repository; gunakan environment variable dan secret manager produksi.</li><li>Validasi tipe, ukuran, MIME, nama, dan lokasi penyimpanan file; cegah file upload menjadi executable atau dapat diakses tanpa authorization.</li><li>Batasi endpoint lookup agar tidak menjadi sarana enumerasi UUID atau kebocoran data. Tampilkan hanya follow-up yang public kepada pemohon.</li><li>Gunakan HTTPS, cookie aman, CSRF protection, throttling, dan session invalidation saat logout/perubahan kredensial.</li><li>Redaksi data pribadi dan isi <code>form_data</code> dari log aplikasi. Tetapkan retensi dan prosedur penghapusan.</li><li>Lakukan dependency audit PHP dan npm, patch berkala, serta review kerentanan sebelum rilis.</li></ul>
+<p class="small">Kontrol yang perlu dibuktikan pada deployment produksi: header keamanan, konfigurasi debug off, backup terenkripsi, restore drill, rotasi secret, dan pemantauan akses file.</p>
+
+<h2>7. Strategi Pengujian</h2>
+<table><tr><th>Level</th><th>Fokus</th><th>Contoh kasus</th></tr>
+<tr><td>Unit</td><td>Aturan kecil dan validator.</td><td>Konversi validation rules, status mapping, normalisasi upload.</td></tr>
+<tr><td>Feature</td><td>Perilaku HTTP end-to-end pada slice aplikasi.</td><td>Admin dashboard, authorization admin, katalog, login requirement, dynamic form, pembuatan ticket.</td></tr>
+<tr><td>Security</td><td>Kontrol akses, input, file, session, dan enumeration.</td><td>User tanpa permission mendapat 403; file invalid ditolak; file internal tidak tampil publik.</td></tr>
+<tr><td>UAT</td><td>Kesesuaian dengan proses layanan.</td><td>Pemohon menyelesaikan pengajuan; admin memproses dan memberi tindak lanjut; tiket dapat dilacak.</td></tr>
+<tr><td>Regression</td><td>Perlindungan alur yang sudah ada.</td><td>Jalankan seluruh suite setelah perubahan migration, policy, route, atau validator.</td></tr></table>
+<h3>Baseline test repository</h3>
+<p>Feature test yang tersedia mencakup akses admin seeded, penolakan user tanpa permission, visibilitas katalog, kewajiban login saat mengajukan, validasi field dinamis, pembuatan Kode Unik tiket, redirect cek tiket, dan status awal <code>submitted</code>. Perintah standar: <code>php artisan test</code>; script Composer juga membersihkan konfigurasi sebelum test.</p>
+
+<h2>8. Deployment dan Operasi</h2>
+<h3>8.1 Environment</h3>
+<table><tr><th>Environment</th><th>Tujuan</th><th>Aturan</th></tr>
+<tr><td>Local</td><td>Pengembangan individual.</td><td>Data dummy; tidak memakai secret produksi.</td></tr>
+<tr><td>Staging</td><td>Integrasi dan UAT.</td><td>Konfigurasi menyerupai produksi; data disanitasi.</td></tr>
+<tr><td>Production</td><td>Layanan pengguna nyata.</td><td>Approval rilis, backup, monitoring, HTTPS, debug off.</td></tr></table>
+<h3>8.2 Checklist rilis</h3>
+<ol><li>Review perubahan dan hasil test.</li><li>Backup database dan storage; verifikasi backup dapat dibaca.</li><li>Install dependency dengan mode production dan build asset.</li><li>Set environment, cache konfigurasi/route sesuai prosedur, lalu jalankan migration yang disetujui.</li><li>Smoke test: login, katalog, pengajuan, lookup UUID, QR, admin ticket, follow-up.</li><li>Pantau log dan error rate; dokumentasikan hasil serta keputusan rollback.</li></ol>
+<h3>8.3 Rollback</h3>
+<p>Rollback harus memiliki trigger yang jelas: migrasi gagal, error kritis, kebocoran data, atau alur pengajuan tidak dapat digunakan. Kembalikan versi aplikasi, pulihkan database hanya bila diperlukan dan disetujui, verifikasi smoke test, lalu buat incident record.</p>
+
+<h2>9. Pemeliharaan dan Manajemen Perubahan</h2>
+<p>Semua perubahan dicatat sebagai issue/change request dengan alasan bisnis, dampak data, risiko keamanan, acceptance criteria, owner, dan rencana rollback. Perubahan pada migration, policy, validator, route, dan storage dikategorikan berdampak tinggi dan memerlukan regression test.</p>
+<table><tr><th>Kategori</th><th>Target respons awal</th><th>Contoh</th></tr>
+<tr><td>P1 kritis</td><td>Segera, ditangani on-call</td><td>Pengajuan gagal luas, data bocor, sistem tidak tersedia.</td></tr>
+<tr><td>P2 tinggi</td><td>Hari kerja yang sama</td><td>Fitur utama terganggu untuk sebagian besar pengguna.</td></tr>
+<tr><td>P3 normal</td><td>Direncanakan pada sprint</td><td>Bug minor, perbaikan UX, perubahan label.</td></tr>
+<tr><td>P4 enhancement</td><td>Masuk backlog</td><td>Pelaporan tambahan atau integrasi baru.</td></tr></table>
+
+<h2>10. Risiko, RACI, dan Traceability</h2>
+<h3>10.1 Risiko utama</h3>
+<table><tr><th>Risiko</th><th>Dampak</th><th>Mitigasi</th></tr>
+<tr><td>File lampiran tidak terlindungi</td><td>Kebocoran dokumen pemohon.</td><td>Storage private, authorization per ticket, MIME/size validation, security test.</td></tr>
+<tr><td>UUID lookup dieksploitasi</td><td>Enumerasi atau disclosure data.</td><td>Rate limit, response minim, authorization/visibility filtering, audit log.</td></tr>
+<tr><td>Perubahan field merusak pengajuan</td><td>Data tidak lengkap atau validasi gagal.</td><td>Migration/data review, backward compatibility, feature regression, UAT.</td></tr>
+<tr><td>Tidak ada restore yang teruji</td><td>Downtime atau kehilangan data.</td><td>Backup terjadwal dan restore drill berkala.</td></tr>
+<tr><td>SLA tidak terpantau</td><td>Permohonan melewati target layanan.</td><td>Definisikan timer, dashboard, alert, dan escalation owner.</td></tr></table>
+<h3>10.2 RACI ringkas</h3>
+<table><tr><th>Aktivitas</th><th>Produk</th><th>Developer</th><th>QA</th><th>Ops</th><th>Pemilik layanan</th></tr>
+<tr><td>Prioritas kebutuhan</td><td>A/R</td><td>C</td><td>C</td><td>C</td><td>R</td></tr>
+<tr><td>Desain dan implementasi</td><td>A</td><td>R</td><td>C</td><td>C</td><td>C</td></tr>
+<tr><td>Pengujian dan UAT</td><td>A</td><td>C</td><td>R</td><td>C</td><td>R</td></tr>
+<tr><td>Deployment</td><td>A</td><td>C</td><td>C</td><td>R</td><td>I</td></tr>
+<tr><td>Incident dan operasi</td><td>A</td><td>C</td><td>C</td><td>R</td><td>R</td></tr></table>
+<p class="small">R = Responsible, A = Accountable, C = Consulted, I = Informed.</p>
+<h3>10.3 Traceability</h3>
+<table><tr><th>Kebutuhan</th><th>Implementasi</th><th>Test/bukti</th></tr>
+<tr><td>FR-01, FR-02</td><td>Catalog routes, auth middleware</td><td><code>PhaseTwoTest</code>: catalog dan login redirect.</td></tr>
+<tr><td>FR-03, FR-04</td><td>ServiceApplicationController, DynamicServiceFormValidator, Ticket</td><td><code>PhaseTwoTest</code>: errors, UUID, form_data, status.</td></tr>
+<tr><td>FR-07</td><td>can:view-admin, policies, roles/permissions</td><td><code>PhaseOneTest</code>: admin allowed dan non-admin 403.</td></tr>
+<tr><td>Ticket operations</td><td>Admin TicketController, TicketFollowUp</td><td>Perlu ditambah: status transition, public/internal follow-up, file access.</td></tr></table>
+
+<h2>11. Kriteria Penerimaan dan Tindak Lanjut</h2>
+<h3>11.1 Kriteria penerimaan baseline</h3>
+<ul><li>Pengunjung dapat menemukan layanan aktif dan requirement-nya.</li><li>Pemohon yang belum login diarahkan ke login saat hendak mengajukan.</li><li>Field wajib dari konfigurasi service divalidasi dan error ditampilkan.</li><li>Pengajuan valid menghasilkan UUID unik, status <code>submitted</code>, dan halaman lookup.</li><li>User tanpa permission tidak dapat membuka modul admin.</li><li>Admin dapat memperbarui status dan menambahkan tindak lanjut sesuai validasi.</li><li>Test suite, lint, dan build asset lulus pada pipeline rilis.</li></ul>
+<h3>11.2 Tindak lanjut prioritas</h3>
+<ol><li>Tambahkan feature test untuk transisi status dan batasan visibilitas follow-up publik/internal.</li><li>Tambahkan test keamanan untuk download file, rate limit lookup, dan sanitasi data/log.</li><li>Tetapkan target SLA operasional, RTO/RPO, retensi data, dan owner incident.</li><li>Siapkan pipeline CI yang menjalankan <code>php artisan test</code>, Pint check, dependency audit, dan <code>npm run build</code>.</li><li>Lakukan UAT bersama pemilik layanan dengan data dan skenario yang disetujui.</li></ol>
+
+<h2>Riwayat Dokumen</h2>
+<table><tr><th>Versi</th><th>Tanggal</th><th>Perubahan</th><th>Penanggung jawab</th></tr>
+<tr><td>1.0</td><td>26-08-2026</td><td>Baseline SDLC berdasarkan repository saat ini.</td><td>Tim pengembangan</td></tr></table>
+</body>
+</html>

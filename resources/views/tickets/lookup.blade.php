@@ -8,7 +8,7 @@
                     <x-app-logo size="sm" />
                 </a>
                 <h1 class="mt-2 text-2xl font-semibold tracking-tight text-zinc-950">Cek Tiket</h1>
-                <p class="mt-1 text-sm text-zinc-600">Masukkan UUID tiket untuk melihat status pengajuan layanan.</p>
+                <p class="mt-1 text-sm text-zinc-600">Masukkan Kode Unik tiket untuk melihat status pengajuan layanan.</p>
             </div>
             @auth
                 <x-ui.button as="a" href="{{ route('dashboard') }}" variant="secondary">Dashboard</x-ui.button>
@@ -20,7 +20,7 @@
         <x-ui.card>
             <form method="GET" action="{{ route('tickets.lookup') }}" class="grid gap-3 md:grid-cols-[1fr_auto]">
                 <label class="block">
-                    <span class="mb-1 block text-sm font-medium text-zinc-700">UUID Tiket</span>
+                    <span class="mb-1 block text-sm font-medium text-zinc-700">Kode Unik Tiket</span>
                     <input
                         type="text"
                         name="uuid"
@@ -108,7 +108,7 @@
         @elseif ($searched)
             <x-ui.card class="mt-5 border-red-200 bg-red-50">
                 <h2 class="text-base font-semibold text-red-800">Tiket tidak ditemukan</h2>
-                <p class="mt-1 text-sm text-red-700">Periksa kembali UUID tiket yang dimasukkan.</p>
+                <p class="mt-1 text-sm text-red-700">Periksa kembali Kode Unik tiket yang dimasukkan.</p>
             </x-ui.card>
         @endif
     </div>
