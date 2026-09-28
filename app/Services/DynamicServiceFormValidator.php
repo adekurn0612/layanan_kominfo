@@ -34,16 +34,16 @@ class DynamicServiceFormValidator
     {
         $rules = [$field->is_required ? 'required' : 'nullable'];
 
-        $rules[] = match ($field->type) {
-            'email' => 'email',
-            'number' => 'numeric',
-            'date' => 'date',
-            'datetime' => 'date',
-            'phone' => 'regex:/^[0-9+().\\-\\s]+$/',
-            'file' => 'file|mimes:jpg,jpeg,png,pdf|max:5120',
-            'checkbox' => 'array',
-            default => 'string',
-        };
+        $rules = [...$rules, ...match ($field->type) {
+            'email' => ['email'],
+            'number' => ['numeric'],
+            'date' => ['date'],
+            'datetime' => ['date'],
+            'phone' => ['regex:/^[0-9+().\\-\\s]+$/'],
+            'file' => ['file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'checkbox' => ['array'],
+            default => ['string'],
+        }];
 
         if (in_array($field->type, ['select', 'radio'], true)) {
             $options = implode(',', array_map(fn ($option) => str_replace(',', '\,', (string) $option), $field->normalizedOptions()));

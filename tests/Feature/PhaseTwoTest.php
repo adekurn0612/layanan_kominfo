@@ -6,6 +6,8 @@ use App\Models\Service;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class PhaseTwoTest extends TestCase
@@ -103,5 +105,32 @@ class PhaseTwoTest extends TestCase
             ->assertOk()
             ->assertSee($ticket->uuid)
             ->assertSee('Permintaan Hosting');
+    }
+
+    public function test_dynamic_service_form_accepts_uploaded_file_field(): void
+    {
+        $this->seed();
+        Storage::fake('local');
+
+        $admin = User::where('email', 'admin@pemda.test')->firstOrFail();
+        $service = Service::where('code', 'pembuatan-website-desa')->firstOrFail();
+
+        $response = $this->actingAs($admin)
+            ->post(route('services.apply.store', $service), [
+                'fields' => [
+                    'nama_desa' => 'Desa Contoh',
+                    'kecamatan' => 'Kecamatan Contoh',
+                    'nama_kepala_desa' => 'Nama Kepala Desa',
+                    'nomor_hp' => '081234567890',
+                    'email' => 'desa@example.test',
+                    'domain' => 'desa-contoh.go.id',
+                    'surat_permohonan' => UploadedFile::fake()->create('surat.pdf', 10, 'application/pdf'),
+                ],
+            ]);
+
+        $ticket = Ticket::firstOrFail();
+
+        $response->assertRedirect(route('tickets.lookup', ['uuid' => $ticket->uuid]));
+        $this->assertSame('surat.pdf', $ticket->form_data['surat_permohonan']['original_name']);
     }
 }
