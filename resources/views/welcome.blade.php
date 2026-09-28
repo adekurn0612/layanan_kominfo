@@ -5,6 +5,26 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ config('app.name') }}</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            #survey-modal-panel {
+                width: 50vw;
+                height: 70vh;
+            }
+
+            @media (max-width: 1023px) {
+                #survey-modal-panel {
+                    width: 70vw;
+                    height: 70vh;
+                }
+            }
+
+            @media (max-width: 639px) {
+                #survey-modal-panel {
+                    width: 92vw;
+                    height: 75vh;
+                }
+            }
+        </style>
     </head>
     <body class="min-h-screen bg-[#F7FBFD] text-zinc-950 antialiased">
         <header class="border-b border-[#D7EDF6] bg-white">
@@ -164,7 +184,7 @@
     · All rights reserved
 </footer>
         <div id="survey-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-zinc-950/70 p-4" role="dialog" aria-modal="true" aria-labelledby="survey-title">
-            <div class="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-lg bg-white shadow-2xl">
+            <div id="survey-modal-panel" class="flex flex-col overflow-hidden rounded-lg bg-white shadow-2xl">
                 <div class="flex items-center justify-between border-b border-zinc-200 px-4 py-3">
                     <h2 id="survey-title" class="text-base font-semibold text-zinc-900">Survei Layanan Digital</h2>
                     <button type="button" id="close-survey-modal" class="rounded-md px-3 py-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-100" aria-label="Tutup survei">Tutup</button>
